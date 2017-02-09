@@ -89,6 +89,20 @@ var readAssetStateHistorySurgicalKit = func(stub shim.ChaincodeStubInterface, ar
 	return SurgicalKitClass.ReadAssetStateHistory(stub, args)
 }
 
+var kitTemperedAlert iot.AlertName = "KITTEMPER"
+var kitTemperedRule iot.RuleFunc = func(stub shim.ChaincodeStubInterface, SurgicalKit *iot.Asset) error {
+	ownerrole, found := iot.GetObjectAsNumber(SurgicalKit.State, "surgicalkit.transit.endtransit")
+	kitst, found := iot.GetObjectAsNumber(SurgicalKit.State, "surgicalkit.surgicalkit.status")
+	if found {
+		if ownerrole == "warehouse manager" && kitst == "In-Use" {
+			iot.RaiseAlert(SurgicalKit, kitTemperedAlert)
+		} else {
+			iot.ClearAlert(SurgicalKit, excessTiltAlert)
+		}
+	}
+	return nil
+}
+
 var excessForceAlert iot.AlertName = "EXCESSFORCE"
 var excessForceRule iot.RuleFunc = func(stub shim.ChaincodeStubInterface, SurgicalKit *iot.Asset) error {
 	force, found := iot.GetObjectAsNumber(SurgicalKit.State, "surgicalkit.sensors.maxgforce")
@@ -153,9 +167,11 @@ var outOfAreaRule iot.RuleFunc = func(stub shim.ChaincodeStubInterface, Surgical
 }
 
 func init() {
+	iot.AddRule("Sterlization Lost Alert", SurgicalKitClass, []iot.AlertName{kitTemperedAlert}, kitTemperedRule)
 	iot.AddRule("Excess Force Alert", SurgicalKitClass, []iot.AlertName{excessForceAlert}, excessForceRule)
 	iot.AddRule("Excess Tilt Alert", SurgicalKitClass, []iot.AlertName{excessTiltAlert}, excessTiltRule)
 	iot.AddRule("Out Of Area Alert", SurgicalKitClass, []iot.AlertName{outOfAreaAlert}, outOfAreaRule)
+	
 
 	iot.AddRoute("createAssetSurgicalKit", "invoke", SurgicalKitClass, createAssetSurgicalKit)
 	iot.AddRoute("replaceAssetSurgicalKit", "invoke", SurgicalKitClass, replaceAssetSurgicalKit)
