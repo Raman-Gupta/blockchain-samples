@@ -20,7 +20,7 @@ package main
 
 import (
 	"math"
-
+	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	iot "github.com/ibm-watson-iot/blockchain-samples/contracts/platform/iotcontractplatform"
 )
