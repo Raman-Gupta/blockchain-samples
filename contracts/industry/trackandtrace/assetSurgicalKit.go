@@ -106,7 +106,7 @@ var kitTemperedRule iot.RuleFunc = func(stub shim.ChaincodeStubInterface, Surgic
 		if ownerrole == "warehouse manager" && kitst == "In-Use" {
 			iot.RaiseAlert(SurgicalKit, kitTemperedAlert)
 		} else {
-			iot.ClearAlert(SurgicalKit, excessTiltAlert)
+			iot.ClearAlert(SurgicalKit, kitTemperedAlert)
 		}
 	//}
 	return nil
