@@ -96,7 +96,7 @@ var kitTemperedRule iot.RuleFunc = func(stub shim.ChaincodeStubInterface, Surgic
 	if !found {
 		return nil	
 	}
-	kitst, found := iot.GetObjectAsString(SurgicalKit.State, "surgicalkit.surgicalkit.status")
+	kitst, found := iot.GetObjectAsString(SurgicalKit.State, "surgicalkit.status")
 	fmt.Println("kitst--------------------",kitst)
 	if !found {
 		return nil	
