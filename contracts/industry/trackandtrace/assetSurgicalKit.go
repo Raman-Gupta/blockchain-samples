@@ -102,10 +102,12 @@ var kitTemperedRule iot.RuleFunc = func(stub shim.ChaincodeStubInterface, Surgic
 		return nil	
 	}
 	//if found {
-	fmt.Println(ownerrole == "warehouse manager" && kitst == "In-Use")
-		if ownerrole == "warehouse manager" && kitst == "In-Use" {
+	fmt.Println(ownerrole == "distributor" && kitst == "Tampered")
+		if ownerrole == "distributor" && kitst == "Tampered" {
 			iot.RaiseAlert(SurgicalKit, kitTemperedAlert)
-		} else {
+		}else if ownerrole == "manufacturer" && kitst == "Tampered" {
+			iot.RaiseAlert(SurgicalKit, kitTemperedAlert)
+		}else {
 			iot.ClearAlert(SurgicalKit, kitTemperedAlert)
 		}
 	//}
