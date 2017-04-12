@@ -91,21 +91,19 @@ var readAssetStateHistorySurgicalKit = func(stub shim.ChaincodeStubInterface, ar
 
 var kitTemperedAlert iot.AlertName = "KITTEMPER"
 var kitTemperedRule iot.RuleFunc = func(stub shim.ChaincodeStubInterface, SurgicalKit *iot.Asset) error {
-	ownerrole, found := iot.GetObjectAsString(SurgicalKit.State, "surgicalkit.transit.endtransit")
+	/*ownerrole, found := iot.GetObjectAsString(SurgicalKit.State, "surgicalkit.transit.endtransit")
 	fmt.Println("ownerrole--------------------",ownerrole)
 	if !found {
 		return nil	
-	}
+	}*/
 	kitst, found := iot.GetObjectAsString(SurgicalKit.State, "surgicalkit.status")
 	fmt.Println("kitst--------------------",kitst)
 	if !found {
 		return nil	
 	}
 	//if found {
-	fmt.Println(ownerrole == "distributor" && kitst == "Tampered")
-		if ownerrole == "distributor" && kitst == "Tampered" {
-			iot.RaiseAlert(SurgicalKit, kitTemperedAlert)
-		}else if ownerrole == "manufacturer" && kitst == "Tampered" {
+	//fmt.Println(ownerrole == "distributor" && kitst == "Tampered")
+		if kitst == "Tampered" {
 			iot.RaiseAlert(SurgicalKit, kitTemperedAlert)
 		}else {
 			iot.ClearAlert(SurgicalKit, kitTemperedAlert)
